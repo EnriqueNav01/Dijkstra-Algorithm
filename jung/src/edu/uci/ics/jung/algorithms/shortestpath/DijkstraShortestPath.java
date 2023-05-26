@@ -20,7 +20,43 @@ import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
+public class Main {
+    public static void main(String[] args) {
+        Graph<String, MyEdge> g = new SparseMultigraph<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("GraphTest.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                String source = values[0];
+                String target = values[1];
+                double weight = Double.parseDouble(values[2]);
+                MyEdge edge = new MyEdge(weight);
+                g.addEdge(edge, source, target);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Now we have the graph `g` loaded from your CSV test data, 
+        // we can use it with DijkstraShortestPath class.
+    }
+}
+
+class MyEdge {
+    private double weight;
+
+    public MyEdge(double weight) {
+        this.weight = weight;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+}
 /**
  * <p>Calculates distances and shortest paths using Dijkstra's   
  * single-source-shortest-path algorithm.  This is a lightweight
